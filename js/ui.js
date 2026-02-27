@@ -1,7 +1,7 @@
 const UI = {
 
     // =========================
-    // جلب مسار صورة الكرت
+    // جلب صورة الكرت
     // =========================
     getCardImage(card){
 
@@ -12,7 +12,6 @@ const UI = {
             if(card.value === "SMALL"){
                 return "assets/cards/joker_black.svg";
             }
-            return "assets/cards/joker.svg";
         }
 
         const suitName = {
@@ -52,15 +51,11 @@ const UI = {
                 img.src = this.getCardImage(card);
                 img.className = "card";
 
-                // اللاعب الحقيقي فقط يقدر يضغط
                 if(player.isHuman){
-                    img.onclick = () => {
-                        game.playTurn(card);
-                    };
+                    img.onclick = () => game.playTurn(card);
                 }
 
                 div.appendChild(img);
-
             });
 
         });
@@ -68,35 +63,37 @@ const UI = {
     },
 
     // =========================
-    // عرض الكروت في وسط الطاولة
+    // عرض الكروت في الوسط (تموضع ثابت لكل لاعب)
     // =========================
     renderCenter(game){
 
-    const center = document.getElementById("centerTable");
-    center.innerHTML = "";
+        const center = document.getElementById("centerTable");
+        center.innerHTML = "";
 
-    const positions = [
-        { top: "65%", left: "50%" },  // لاعب 1 (أسفل)
-        { top: "50%", left: "75%" },  // لاعب 2 (يمين)
-        { top: "35%", left: "50%" },  // لاعب 3 (أعلى)
-        { top: "50%", left: "25%" }   // لاعب 4 (يسار)
-    ];
+        const positions = {
+            0: { top: "70%", left: "50%" }, // لاعب 1 (أسفل)
+            1: { top: "50%", left: "75%" }, // لاعب 2 (يمين)
+            2: { top: "30%", left: "50%" }, // لاعب 3 (أعلى)
+            3: { top: "50%", left: "25%" }  // لاعب 4 (يسار)
+        };
 
-    game.trick.forEach(play => {
+        game.trick.forEach(play => {
 
-        const img = document.createElement("img");
-        img.src = this.getCardImage(play.card);
-        img.className = "card playedCard";
+            const img = document.createElement("img");
+            img.src = this.getCardImage(play.card);
+            img.className = "card playedCard";
 
-        img.style.top = positions[play.player].top;
-        img.style.left = positions[play.player].left;
-        img.style.transform = "translate(-50%, -50%)";
+            img.style.top = positions[play.player].top;
+            img.style.left = positions[play.player].left;
+            img.style.transform = "translate(-50%, -50%)";
 
-        center.appendChild(img);
+            center.appendChild(img);
+        });
+    },
 
-    });
-
-}
+    // =========================
+    // تحديث السكور
+    // =========================
     updateScore(game){
 
         document.getElementById("team1Score").innerText =
@@ -104,7 +101,6 @@ const UI = {
 
         document.getElementById("team2Score").innerText =
             "الفريق 2: " + game.scores[2];
-
     },
 
     // =========================
@@ -116,35 +112,9 @@ const UI = {
 
         status.innerText =
             "الحكم: " + game.trump +
-            " | المشتري: لاعب " + (game.buyer+1) +
+            " | المشتري: لاعب " + (game.buyer + 1) +
             " | الطلب: " + game.bidValue +
             " | لفة: " + game.trickNumber + "/9";
-
-    },
-
-    // =========================
-    // رسالة مؤقتة
-    // =========================
-    showMessage(text){
-
-        const msg = document.createElement("div");
-        msg.innerText = text;
-        msg.style.position = "absolute";
-        msg.style.top = "50%";
-        msg.style.left = "50%";
-        msg.style.transform = "translate(-50%,-50%)";
-        msg.style.background = "rgba(0,0,0,0.8)";
-        msg.style.padding = "20px 40px";
-        msg.style.borderRadius = "15px";
-        msg.style.fontSize = "20px";
-        msg.style.zIndex = "999";
-
-        document.body.appendChild(msg);
-
-        setTimeout(()=>{
-            msg.remove();
-        },2000);
     }
-
 
 };
