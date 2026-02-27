@@ -1,17 +1,10 @@
 const UI = {
 
-    // =========================
-    // جلب صورة الكرت
-    // =========================
     getCardImage(card){
 
         if(card.suit === "JOKER"){
-            if(card.value === "BIG"){
-                return "assets/cards/joker_red.svg";
-            }
-            if(card.value === "SMALL"){
-                return "assets/cards/joker_black.svg";
-            }
+            if(card.value === "BIG") return "assets/cards/joker_red.svg";
+            if(card.value === "SMALL") return "assets/cards/joker_black.svg";
         }
 
         const suitName = {
@@ -35,9 +28,6 @@ const UI = {
         return `assets/cards/${valueName}_of_${suitName}.svg`;
     },
 
-    // =========================
-    // عرض أوراق اللاعبين
-    // =========================
     renderHands(game){
 
         game.players.forEach(player => {
@@ -57,24 +47,19 @@ const UI = {
 
                 div.appendChild(img);
             });
-
         });
-
     },
 
-    // =========================
-    // عرض الكروت في الوسط (تموضع ثابت لكل لاعب)
-    // =========================
     renderCenter(game){
 
         const center = document.getElementById("centerTable");
         center.innerHTML = "";
 
         const positions = {
-            0: { top: "70%", left: "50%" }, // لاعب 1 (أسفل)
-            1: { top: "50%", left: "75%" }, // لاعب 2 (يمين)
-            2: { top: "30%", left: "50%" }, // لاعب 3 (أعلى)
-            3: { top: "50%", left: "25%" }  // لاعب 4 (يسار)
+            0:{ top:"70%", left:"50%" },
+            1:{ top:"50%", left:"75%" },
+            2:{ top:"30%", left:"50%" },
+            3:{ top:"50%", left:"25%" }
         };
 
         game.trick.forEach(play => {
@@ -83,6 +68,7 @@ const UI = {
             img.src = this.getCardImage(play.card);
             img.className = "card playedCard";
 
+            img.style.position = "absolute";
             img.style.top = positions[play.player].top;
             img.style.left = positions[play.player].left;
             img.style.transform = "translate(-50%, -50%)";
@@ -91,9 +77,6 @@ const UI = {
         });
     },
 
-    // =========================
-    // تحديث السكور
-    // =========================
     updateScore(game){
 
         document.getElementById("team1Score").innerText =
@@ -101,20 +84,6 @@ const UI = {
 
         document.getElementById("team2Score").innerText =
             "الفريق 2: " + game.scores[2];
-    },
-
-    // =========================
-    // عرض معلومات الجولة
-    // =========================
-    updateRoundInfo(game){
-
-        const status = document.getElementById("roundStatus");
-
-        status.innerText =
-            "الحكم: " + game.trump +
-            " | المشتري: لاعب " + (game.buyer + 1) +
-            " | الطلب: " + game.bidValue +
-            " | لفة: " + game.trickNumber + "/9";
     }
 
 };
