@@ -72,34 +72,31 @@ const UI = {
     // =========================
     renderCenter(game){
 
-        const center = document.getElementById("centerTable");
-        center.innerHTML = "";
+    const center = document.getElementById("centerTable");
+    center.innerHTML = "";
 
-        game.trick.forEach((play,index) => {
+    const positions = [
+        { top: "65%", left: "50%" },  // لاعب 1 (أسفل)
+        { top: "50%", left: "75%" },  // لاعب 2 (يمين)
+        { top: "35%", left: "50%" },  // لاعب 3 (أعلى)
+        { top: "50%", left: "25%" }   // لاعب 4 (يسار)
+    ];
 
-            const img = document.createElement("img");
-            img.src = this.getCardImage(play.card);
-            img.className = "card playedCard";
+    game.trick.forEach(play => {
 
-            // توزيع بسيط حول المركز
-            const positions = [
-                {x:-80, y:0},
-                {x:80, y:0},
-                {x:0, y:-80},
-                {x:0, y:80}
-            ];
+        const img = document.createElement("img");
+        img.src = this.getCardImage(play.card);
+        img.className = "card playedCard";
 
-            img.style.transform = `translate(-50%,-50%) translate(${positions[index].x}px, ${positions[index].y}px)`;
+        img.style.top = positions[play.player].top;
+        img.style.left = positions[play.player].left;
+        img.style.transform = "translate(-50%, -50%)";
 
-            center.appendChild(img);
+        center.appendChild(img);
 
-        });
+    });
 
-    },
-
-    // =========================
-    // تحديث السكور
-    // =========================
+}
     updateScore(game){
 
         document.getElementById("team1Score").innerText =
@@ -148,5 +145,6 @@ const UI = {
             msg.remove();
         },2000);
     }
+
 
 };
